@@ -374,3 +374,9 @@ The project highlights an end-to-end approach to Business Intelligence: from raw
 This is an academic portfolio project developed using publicly available HRM Open Data.
 
 The analysis and governance considerations presented in this repository are the author's own analytical work and do not represent official recommendations, policies, or decisions by the Halifax Regional Municipality.
+
+---
+
+# Note
+
+The GitHub repository contains the analytical outputs, SQL queries, Python analysis, Power BI report, and project documentation. The original SSIS/ETL development environment was not included in the repository.
