@@ -1,224 +1,147 @@
 # HRM Open Data Analytics
 
-## Business Intelligence, Machine Learning & Data Governance Case Study
+## Business Intelligence, Machine Learning & Data Analytics Case Study
 
 **Author:** Danielle Aranha
 **Project Type:** Academic Business Intelligence & Analytics Project
-**Tools:** SQL Server, SSIS, Python, scikit-learn, Power BI, DAX and Excel
+**Tools:** Python, Jupyter Notebook, scikit-learn, Power BI, DAX, SQL Server and Excel
 
 ---
 
 # 1. Project Overview
 
-This project analyzes historical usage data from the Halifax Regional Municipality (HRM) Open Data catalog to understand how public datasets are being used over time and to identify distinct usage and lifecycle profiles.
+This project analyzes historical usage patterns across Halifax Regional Municipality (HRM) open datasets to identify distinct dataset usage and lifecycle profiles.
 
-The project combines data preparation, dimensional modeling, SQL, machine learning and Power BI reporting to support data stewardship and governance-oriented decision-making.
+The analysis combines data preparation, feature engineering, machine learning and interactive Power BI reporting to explore how public datasets differ in terms of usage intensity, age and activity.
 
-The analysis includes approximately **639,000 historical usage records covering 239 HRM public datasets**.
+The source data contains approximately **639,000 historical usage records covering 239 HRM public datasets**.
 
-These records do not represent 639,000 unique datasets. Instead, they represent repeated historical observations of the same 239 datasets over time, allowing usage patterns and activity trends to be analyzed.
+The 639,000 records represent repeated historical observations of the same underlying datasets over time. They are therefore not 639,000 unique datasets.
+
+The final analysis uses these historical observations to derive analytical characteristics and identify broader usage profiles across the HRM dataset catalog.
 
 ---
 
-# 2. Business Problem
+# 2. Business Question
 
-Public data catalogs can contain hundreds of datasets that vary significantly in age, usage and activity.
+Public data catalogs can contain datasets with very different levels of activity and maturity.
 
-A dataset that has existed for many years may have accumulated substantial historical usage, while another may be relatively new and still developing adoption. Other datasets may show very low activity and require additional review.
+Some datasets may receive substantial usage, while others may have accumulated little activity. Older datasets may also have very different usage patterns from recently published datasets.
 
 The project explores the following question:
 
-> **How can historical usage patterns and dataset maturity help identify different profiles within a public data catalog and support data governance and lifecycle decisions?**
+> **Can historical usage, dataset age and activity patterns be used to identify distinct profiles within a public data catalog and support data governance decisions?**
 
-The objective was not to automatically classify datasets as valuable or obsolete.
+The goal was not to automatically determine which datasets should be retained or retired.
 
-Instead, the analysis provides a quantitative framework that can help data stewards and decision-makers prioritize datasets for maintenance, promotion, revitalization or further review.
+Instead, the analysis provides a quantitative framework that can help identify datasets that may warrant continued promotion, revitalization, monitoring or further lifecycle review.
 
 ---
 
 # 3. Data Source
 
-The project uses open data usage information published by the **Halifax Regional Municipality (HRM)** through the ArcGIS Hub platform.
+The project uses historical usage information from the **Halifax Regional Municipality Open Data catalog**, published through the HRM ArcGIS Hub.
 
-**Source:** HRM Open Data
+**Source:** Halifax Regional Municipality Open Data
 **Dataset:** Open Data Analytics / Usage Statistics
-**Portal:** https://data-hrm.hub.arcgis.com/datasets/HRM::open-data-analytics/about
 
-The source provides historical usage information for datasets available through the HRM public data catalog.
+The dataset used for this project was based on the information available through **October 19, 2025**.
 
-The analytical dataset used in the project contains approximately:
+This date represents the latest date available in the dataset snapshot used for the analysis and was therefore used as the analytical cutoff for calculations involving dataset age and activity.
 
-* **239 datasets**
-* **639,000 historical usage records**
-* Historical observations dating back to approximately 2014
-
-Each dataset appears repeatedly throughout the historical data, allowing changes in usage and activity to be analyzed over time.
+Using a consistent cutoff date ensures that all datasets are evaluated against the same reference point.
 
 ---
 
-# 4. Analytical Approach
+# 4. Analytical Workflow
 
-The project follows an end-to-end analytical workflow:
+The project follows the workflow below:
 
 ```text
 HRM Open Data
       ↓
 Historical Usage Records
       ↓
-Data Preparation & ETL
+Data Preparation
       ↓
-SQL / Analytical Features
+Feature Engineering
       ↓
-Dimensional Data Model
+Exploratory Analysis
       ↓
-Python & K-Means Clustering
+K-Means Clustering
       ↓
-Dataset Usage & Lifecycle Profiles
+Five Dataset Profiles
       ↓
 Power BI Reporting
       ↓
-Data Governance Insights
+Governance-Oriented Insights
 ```
 
-This approach combines technical data preparation with analytical interpretation and business-oriented reporting.
+The project was developed iteratively, with exploratory analysis and clustering experimentation preceding the final Power BI solution.
 
 ---
 
-# 5. ETL and Data Preparation
+# 5. Data Preparation & Feature Engineering
 
-Data preparation involved transforming raw historical usage information into an analytical structure suitable for reporting and machine learning.
+The historical usage data was prepared for analytical and machine learning purposes.
 
-The workflow included:
+The clustering analysis used derived characteristics describing different aspects of dataset behavior.
 
-* Data extraction from the HRM Open Data source
-* Staging and transformation processes
-* SQL-based data preparation
-* Lookup and validation logic
-* Analytical feature creation
-* Data quality and consistency validation
+Key features included:
 
-The project used tools including:
+* **Total Usage**
+* **Dataset Age**
+* **Time Since Update**
+* **Usage per Year**
+* **Staleness Ratio**
 
-* SQL Server
-* SQL Server Integration Services (SSIS)
-* SQL Server Management Studio (SSMS)
-* Excel
+These features were selected to capture complementary aspects of dataset lifecycle and activity.
 
-The prepared data was then used for analytical reporting and clustering.
+For example, total usage provides historical impact, while annualized usage provides additional context for comparing datasets of different ages.
 
 ---
 
-# 6. Data Model
+# 6. Machine Learning Approach
 
-The Power BI solution uses a dimensional model based on a star schema.
+Python and **scikit-learn** were used to perform K-Means clustering.
 
-## Fact Table
+The objective was to identify groups of datasets with similar usage and lifecycle characteristics.
 
-### Fact_Usage
+Rather than selecting the number of clusters arbitrarily, multiple candidate values of K were evaluated.
 
-Contains historical dataset usage information over time.
-
-Because each dataset appears repeatedly across the historical timeline, this table supports analysis of usage behavior and trends.
-
-## Dimension Tables
-
-### Dim_Dataset
-
-Contains dataset-level information, with one record representing each dataset.
-
-### Dim_AgeBand
-
-Groups datasets into age categories:
-
-* 0–1 year
-* 1–2 years
-* 2–4 years
-* 4–8 years
-* 8+ years
-
-### Dim_Cluster
-
-Provides business-oriented classifications based on the clustering results.
-
-A consistent `DatasetKey`, based on dataset identification attributes, supports the relationship between dataset-level information and historical usage records.
-
----
-
-# 7. Core Analytical Metrics
-
-A fixed reference date of **October 19, 2025** was used for age-related calculations.
-
-Using a fixed reference date ensures that calculations remain stable and reproducible.
-
-Key analytical metrics include:
-
-## Dataset Age
-
-Measures how long a dataset has existed relative to the fixed reference date.
-
-## Total Usage
-
-Represents the cumulative historical impact of a dataset.
-
-## Usage per Year
-
-Represents average annual usage.
-
-This measure was used to reduce the bias that naturally favors older datasets when only total historical usage is considered.
-
-For example, an older dataset may have accumulated high total usage simply because it has existed for a longer period.
-
-Annualized usage provides an additional measure of activity intensity.
-
----
-
-# 8. Machine Learning: K-Means Clustering
-
-Python and scikit-learn were used to identify patterns in dataset usage and lifecycle behavior.
-
-The analysis explored multiple candidate values of **K** before selecting the final clustering solution.
-
-The evaluation included clustering diagnostics such as:
+The analysis considered several clustering diagnostics, including:
 
 * Inertia / Elbow analysis
 * Silhouette Score
 * Davies-Bouldin Index
-* Calinski-Harabasz Score
-* Stability analysis
+* Calinski-Harabasz Index
+* Cluster stability
 
-The final model selected:
+The final analysis used:
 
 > **K = 5**
 
-The clustering process used analytical characteristics derived from the historical usage data, including:
-
-* Total usage
-* Dataset age
-* Time since update
-* Annualized usage
-* Staleness ratio
-
-The goal was to identify interpretable patterns rather than treat the numeric cluster labels themselves as meaningful.
+The five-cluster solution provided an interpretable segmentation of the dataset usage patterns while maintaining a manageable number of profiles for business communication.
 
 ---
 
-# 9. Dataset Usage and Lifecycle Profiles
+# 7. Dataset Profiles
 
-The five clusters were translated into business-oriented profiles to support interpretation.
+The numerical clusters were translated into descriptive business profiles to make the results easier to interpret in Power BI.
 
 ## Power Active
 
-Datasets characterized by strong activity and engagement.
+Datasets characterized by strong usage activity.
 
-These datasets may represent high-value resources that should continue to be maintained and promoted.
+These datasets represent areas of significant engagement and can be considered for continued maintenance and promotion.
 
 ---
 
 ## Fresh Light
 
-Relatively newer datasets with lighter usage.
+Relatively recent datasets with lighter usage.
 
-These datasets may still be developing adoption and can be monitored for future growth.
+These datasets may still be developing adoption and can be monitored to determine whether usage increases over time.
 
 ---
 
@@ -226,189 +149,167 @@ These datasets may still be developing adoption and can be monitored for future 
 
 Older datasets with substantial historical usage.
 
-These datasets demonstrate proven historical value and may be candidates for continued maintenance, modernization or renewed promotion.
+Their historical activity indicates demonstrated engagement despite their age.
 
-Importantly, age alone does not imply that a dataset is obsolete.
+These datasets may be appropriate candidates for continued maintenance, modernization or renewed promotion.
 
 ---
 
 ## Dormant
 
-Datasets with very low activity.
+Datasets showing very low activity.
 
-These datasets may warrant further review to understand whether low usage is related to discoverability, documentation, data quality, audience size or reduced relevance.
+Low usage can have several possible explanations, including discoverability, documentation, audience size or reduced relevance.
+
+These datasets may therefore warrant further investigation rather than an automatic lifecycle decision.
 
 ---
 
 ## Very Old – Low Activity
 
-Mature datasets with minimal activity.
+Very mature datasets characterized by minimal activity.
 
-These datasets may be candidates for deeper lifecycle review, including maintenance requirements, relevance and potential future action.
-
-The clustering results are intended to support prioritization and investigation rather than automatic retirement decisions.
+These datasets can be considered for deeper lifecycle review, particularly when combined with information about business relevance, ownership, maintenance requirements and data quality.
 
 ---
 
-# 10. Power BI Reporting
+# 8. Power BI Solution
 
-The final Power BI solution translates the analytical model and clustering results into an interactive reporting experience.
+The clustering results and analytical measures were translated into an interactive Power BI report.
 
-The report includes explicit DAX measures, dimensional slicers, drill-down functionality and tooltips.
+The report was designed to separate technical validation from analytical and strategic interpretation.
 
-The report was structured to separate technical validation from analytical and strategic interpretation.
+Key capabilities include:
+
+* Interactive filtering
+* Dataset profile analysis
+* Age-band analysis
+* Usage comparisons
+* Drill-down exploration
+* Custom tooltips
+* DAX-based analytical measures
+
+The report allows users to move from an overall view of the dataset catalog toward individual dataset-level analysis.
+
+---
+
+# 9. Report Structure
 
 ## 01 — Data Model Validation
 
-This page supports technical validation of:
-
-* The dimensional model
-* Cluster distribution
-* Dataset age bands
-* Analytical hierarchy
+Provides a technical view of the analytical model and demonstrates how the clustering results can be explored through the Power BI report.
 
 ---
 
 ## 02 — Dataset Health Overview
 
-Provides an executive-level view of the overall health and composition of the HRM Open Data catalog.
+Provides an executive-level overview of the 239 datasets and their distribution across the five usage/lifecycle profiles.
 
-The page focuses on:
+The page is designed to answer:
 
-* Total number of datasets
-* Distribution across dataset profiles
-* Relative size of each profile
+> **What does the overall dataset catalog look like?**
 
 ---
 
 ## 03 — Usage & Impact
 
-Focuses on where and how dataset usage occurs.
+Examines differences in usage across the dataset profiles.
 
-Key analysis includes:
+The analysis includes:
 
-* Historical usage
-* Average annual usage
-* Usage intensity by profile
+* Total historical usage
+* Annualized usage
+* Usage by cluster
 * Dataset-level exploration
+* Drill-down analysis
 
-The report includes hierarchy-based drill-down:
-
-```text
-Cluster
-   ↓
-Age Band
-   ↓
-Dataset
-```
-
-Custom tooltips provide additional dataset-level detail without overcrowding the main visuals.
+This allows users to distinguish historical impact from activity intensity.
 
 ---
 
 ## 04 — Strategic Recommendations
 
-The final analytical layer translates the results into governance-oriented actions.
+Translates the analytical findings into governance-oriented considerations.
 
 Examples include:
 
-### Maintain and Promote
+**Maintain and Promote**
+Highly active datasets may warrant continued attention and promotion.
 
-Prioritize highly active datasets that demonstrate strong engagement.
+**Review and Revitalize**
+Historically valuable datasets may benefit from modernization, improved discoverability or renewed promotion.
 
-### Review and Revitalize
-
-Evaluate historically valuable datasets for modernization, improved discoverability or continued maintenance.
-
-### Investigate Low Activity
-
-Review dormant and very old/low-activity datasets to understand the causes of low engagement before making lifecycle decisions.
+**Investigate Low Activity**
+Dormant and very old/low-activity datasets may warrant additional review before lifecycle decisions are made.
 
 ---
 
-# 11. Key Insights
+# 10. Key Analytical Insights
 
-The analysis demonstrates that a public data catalog should not be evaluated using a single metric.
+The analysis demonstrates that dataset usage cannot be fully described by a single metric.
+
+Several characteristics provide different perspectives:
+
+* **Total usage** reflects accumulated historical impact.
+* **Usage per year** provides additional context for activity intensity.
+* **Dataset age** provides lifecycle context.
+* **Time since update** provides an additional indicator of freshness.
+* **Staleness ratio** helps characterize the relationship between dataset age and recent maintenance/activity.
+
+Combining these characteristics allows datasets with different behavioral patterns to be distinguished more effectively than using total usage alone.
+
+---
+
+# 11. Governance Perspective
+
+The clustering results can support data stewardship by helping organizations identify groups of datasets that may require different types of attention.
 
 For example:
 
-* High total usage may reflect long-term historical value.
-* High annual usage may indicate strong current activity.
-* Dataset age provides context but does not determine relevance.
-* Low usage may have multiple explanations beyond lack of value.
+* Highly active datasets can be monitored for continued availability and discoverability.
+* Older but heavily used datasets can be evaluated for modernization while preserving demonstrated value.
+* Recently published datasets with limited usage can be monitored for adoption.
+* Dormant datasets can be investigated to understand the reasons behind low engagement.
+* Very old, low-activity datasets can be considered for a deeper lifecycle assessment.
 
-By combining these characteristics, the clustering approach provides a more nuanced view of the catalog.
+The analysis therefore provides **decision support**, rather than making automated governance decisions.
 
 ---
 
 # 12. Limitations
 
-Usage metrics alone cannot determine the full value of a dataset.
+Usage data provides only one perspective on the value of a dataset.
 
-A dataset with low public usage may still be important because of:
+Low public usage does not necessarily mean that a dataset has little value. A dataset may have:
 
-* Regulatory requirements
-* Specialized audiences
-* Internal or external dependencies
+* A specialized audience
+* Regulatory importance
+* Internal dependencies
 * Strategic importance
-* Limited but critical use cases
+* A limited but critical use case
 
-Similarly, high historical usage does not automatically guarantee current strategic relevance.
+Similarly, high historical usage does not necessarily indicate that a dataset remains strategically relevant today.
 
-For this reason, the clustering results should be combined with additional business, governance and stakeholder information when making operational decisions.
+The clustering results should therefore be interpreted alongside business ownership, data quality, regulatory requirements, documentation and stakeholder needs.
 
 ---
 
 # 13. Project Outcome
 
-This project demonstrates an end-to-end Business Intelligence and Analytics workflow.
+The project transformed historical municipal open-data usage records into an analytical framework for understanding dataset behavior.
 
-The work integrates:
+The final solution demonstrates the integration of:
 
-**Data Preparation & ETL**
-SQL Server and SSIS were used to prepare and validate the analytical data.
-
-**Dimensional Modeling**
-A star schema was implemented to support efficient dataset and usage analysis.
+**Data Analytics**
+Historical usage patterns were transformed into meaningful analytical features.
 
 **Machine Learning**
-Python and K-Means clustering were used to identify distinct dataset usage and lifecycle profiles.
+K-Means clustering was used to identify five distinct usage and lifecycle profiles.
 
 **Business Intelligence**
-Power BI and explicit DAX measures were used to communicate findings through interactive reporting.
+Power BI and DAX were used to communicate the results through interactive reporting.
 
-**Data Governance Perspective**
-Analytical findings were translated into potential actions related to dataset maintenance, promotion, review and lifecycle management.
+**Data Governance Thinking**
+The resulting profiles were translated into governance-oriented considerations around maintenance, promotion, revitalization and lifecycle review.
 
-The final result demonstrates how historical usage data can be transformed into a structured analytical framework for understanding the health and behavior of a public data catalog.
-
----
-
-## Repository Structure
-
-```text
-HRM-Open-Data-Analytics/
-│
-├── Data/
-│   └── README.md
-│
-├── Documentation/
-│   └── PROJECT_DOCUMENTATION.md
-│
-├── PowerBI/
-│   ├── OpenDataMetrics.pbix
-│   └── Screenshots/
-│
-├── Python/
-│   ├── HRM_Dataset_Clustering.ipynb
-│   ├── cluster_profiles.csv
-│   ├── k_selection_metrics.csv
-│   ├── k_selection.png
-│   ├── cluster_visualization.png
-│   └── silhouette_analysis.png
-│
-├── SQL/
-│   └── Query_Report_BI_Project.sql
-│
-└── README.md
-```
+The project demonstrates how machine learning can be used not only to create statistical segments, but also to translate complex historical data into information that can support practical business and governance discussions.
