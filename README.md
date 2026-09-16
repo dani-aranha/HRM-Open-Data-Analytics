@@ -166,7 +166,7 @@ Provides supporting metrics and visual analysis used to validate and interpret t
 
 Uses the analytical findings to highlight dataset profiles and areas that may warrant further review from a data governance perspective.
 
-![Power BI Governance Considerations](PowerBI/Screenshots/Recommentation.png)
+![Power BI Governance Considerations](PowerBI/Screenshots/Recommendation.png)
 
 ### Report Features
 
